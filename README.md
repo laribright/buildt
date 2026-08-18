@@ -1,36 +1,208 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Buildt — Full-Stack AI Replit Clone
+
+A full-stack AI-powered code editor and IDE built from scratch with Next.js, Supabase, and Inngest. This is the companion repository for the **CodeWithLari** YouTube course.
+
+📺 **[Watch the full course on YouTube →](https://youtu.be/vBi9LVSbWHQ)**
+
+---
+
+## What You'll Build
+
+A complete browser-based IDE with code editing, real-time execution, and AI-powered code assistance.
+
+**Features**
+
+- Create and manage multiple projects with file trees
+- Code editor with syntax highlighting (Monaco Editor)
+- Real-time code execution via E2B code interpreter
+- AI-powered code generation and assistance (Claude, GPT-4)
+- Project management with create, rename, and delete
+- Real-time file updates and workspace state
+- Authentication with Supabase
+- Agent-based task automation via Inngest
+- Responsive design for desktop and tablet
+
+**Backend**
+
+- JWT auth with Supabase
+- Inngest agents for autonomous workflows
+- E2B code interpreter for safe execution
+- Multiple AI model support (OpenAI, Anthropic)
+- WebSocket-ready architecture for real-time updates
+- Database-backed project and file persistence
+
+---
+
+## Stack
+
+| Layer               | Tool                                                                     |
+| ------------------- | ------------------------------------------------------------------------ |
+| Frontend            | [Next.js 16](https://nextjs.org)                                         |
+| UI Components       | [shadcn/ui](https://ui.shadcn.com)                                       |
+| Editor              | [Monaco Editor](https://microsoft.github.io/monaco-editor/)              |
+| Database            | [Supabase](https://supabase.com) — serverless Postgres                   |
+| ORM                 | [Drizzle ORM](https://orm.drizzle.team)                                  |
+| Auth                | [Supabase Auth](https://supabase.com/docs/guides/auth)                   |
+| Code Execution      | [E2B Code Interpreter](https://e2b.dev)                                  |
+| Agents & Automation | [Inngest](https://www.inngest.com)                                       |
+| AI Models           | [OpenAI](https://openai.com) · [Anthropic Claude](https://anthropic.com) |
+| Styling             | [Tailwind CSS 4](https://tailwindcss.com)                                |
+| Runtime             | [Node.js](https://nodejs.org)                                            |
+| Package Manager     | npm                                                                      |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/laribright/buildt.git
+cd buildt
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+
+Copy the example file and fill in your values:
+
+```bash
+cp .env.example .env.local
+```
+
+See [Environment Variables](#environment-variables) below.
+
+### 4. Push the database schema
+
+```bash
+npm run db:push
+```
+
+### 5. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+`.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Supabase — supabase.com dashboard
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# E2B Code Interpreter — dashboard.e2b.dev
+E2B_API_KEY=your-e2b-api-key
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# OpenAI — platform.openai.com
+OPENAI_API_KEY=sk-proj-xxx
 
-## Deploy on Vercel
+# Anthropic Claude — console.anthropic.com
+ANTHROPIC_API_KEY=sk-ant-xxx
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Inngest — inngest.com dashboard
+INNGEST_EVENT_KEY=yyyy-xxx
+INNGEST_SIGNING_KEY=zzzz-xxx
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Database (auto-generated by Supabase)
+DATABASE_URL=postgresql://xxx:xxx@xxx.supabase.co:5432/postgres
+```
+
+---
+
+## Project Structure
+
+```
+buildt/
+├── src/
+│   ├── app/
+│   │   ├── (app)/              # Main app routes
+│   │   │   ├── builds/         # Project listing
+│   │   │   └── ~/              # Dynamic routes
+│   │   │       └── [project]/  # Project workspace
+│   │   ├── api/
+│   │   │   ├── inngest/        # Agent webhooks
+│   │   │   ├── projects/       # Project API routes
+│   │   │   └── auth/           # Auth callbacks
+│   │   ├── auth/               # Auth pages
+│   │   └── layout.tsx          # Root layout
+│   ├── components/
+│   │   ├── ui/                 # shadcn/ui components
+│   │   ├── app-sidebar.tsx     # Main navigation
+│   │   └── theme-switcher.tsx  # Dark/light mode
+│   ├── features/
+│   │   ├── auth/               # Auth logic & components
+│   │   ├── projects/           # Project management
+│   │   ├── file-management/    # File tree & editor
+│   │   ├── publishing/         # Deploy / sharing
+│   │   └── settings/           # User settings
+│   ├── hooks/                  # Custom React hooks
+│   ├── db/
+│   │   ├── index.ts            # Database client
+│   │   └── schema/             # Drizzle tables
+│   ├── inngest/                # Agent workflows
+│   └── lib/
+│       ├── supabase/           # Supabase utilities
+│       └── utils.ts            # Shared helpers
+├── public/                     # Static assets
+├── drizzle.config.ts           # ORM configuration
+├── next.config.ts              # Next.js config
+└── package.json
+```
+
+---
+
+## Key Concepts Covered
+
+- **Next.js 16 App Router** — modern routing with layouts and streaming
+- **Supabase Auth** — secure user authentication and profiles
+- **Drizzle ORM** — type-safe database access to Postgres
+- **Monaco Editor** — professional code editing with language support
+- **E2B Code Interpreter** — safe, serverless code execution
+- **Inngest Agents** — background workflows and automation
+- **Multi-AI Support** — seamless switching between OpenAI and Claude
+- **Real-time Updates** — WebSocket-ready architecture
+- **File Management** — project workspace with nested files
+- **Dark Mode** — theme switching with next-themes
+
+---
+
+## Scripts
+
+```bash
+# Development
+npm run dev           # Start dev server at http://localhost:3000
+npm run build         # Production build
+npm start             # Start production server
+npm run lint          # Run ESLint
+
+# Database
+npm run db:generate   # Generate migrations
+npm run db:migrate    # Run migrations
+npm run db:push       # Push schema to Supabase
+npm run db:studio     # Open Drizzle Studio
+```
+
+---
+
+## Course
+
+This repo is the companion to the full CodeWithLari Replit Clone series on YouTube.
+
+📺 [Watch on YouTube](https://youtu.be/vBi9LVSbWHQ)  
+⭐ If this helped you, please star the repo — it helps a lot!
+
+---
+
+Built with [Next.js](https://nextjs.org) · [Supabase](https://supabase.com) · [Inngest](https://www.inngest.com) · [E2B](https://e2b.dev) · [CodeWithLari](https://youtube.com/@codewithlari)
